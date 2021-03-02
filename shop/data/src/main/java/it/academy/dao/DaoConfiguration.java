@@ -6,6 +6,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -19,6 +20,7 @@ import java.util.Properties;
 
 @PropertySource(value = "classpath:datasource.properties")
 @Configuration
+@ComponentScan("it.academy.dao")
 @EnableTransactionManagement
 public class DaoConfiguration {
 
@@ -44,7 +46,7 @@ public class DaoConfiguration {
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setAnnotatedClasses(
                 Person.class, Product.class, ProductPrice.class,
-                Promo.class, ShopUser.class
+                Promo.class, ShopUser.class, VisitorCount.class
         );
         Properties properties = new Properties();
         properties.setProperty("hibernate.show_sql", "true");
@@ -52,12 +54,12 @@ public class DaoConfiguration {
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
 
         sessionFactoryBean.setHibernateProperties(properties);
-
         return sessionFactoryBean;
     }
 
     @Bean
-    public PlatformTransactionManager platformTransactionManager(SessionFactory sessionFactory) {
+    public PlatformTransactionManager transactionManager(
+            SessionFactory sessionFactory) {
         return new HibernateTransactionManager(sessionFactory);
     }
 }
