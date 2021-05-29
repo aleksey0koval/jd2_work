@@ -1,0 +1,6 @@
+package com.aop;
+
+public abstract class AbstractLibrary {
+
+//    abstract public void getBook();
+}
